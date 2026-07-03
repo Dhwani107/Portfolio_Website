@@ -3,7 +3,8 @@
 
   # Portfolio
 
-  My personal space on the web - built with React, Three.js, and a lot of caffeine
+  Next.js · Tailwind · Three.js
+
 
   [![React](https://img.shields.io/badge/React-18-20232a?style=for-the-badge&logo=react&logoColor=61dafb)](#)
   [![Next.js](https://img.shields.io/badge/Next.js-14.2.35-black?style=for-the-badge&logo=next.js&logoColor=white)](#)
