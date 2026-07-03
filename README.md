@@ -60,3 +60,27 @@ To build and test the production-optimized files locally:
 npm run build
 npm start
 ```
+
+---
+
+## 🔒 Admin & Editing Mode
+
+To prevent public visitors from modifying the portfolio content while allowing the site owner to add, edit, or delete items, the website includes an **Admin Lock and Edit Mode**. By default, all modifications are disabled and hidden.
+
+### How to enter Edit Mode:
+You can trigger the passcode prompt in three ways:
+1. **Logo 5-Clicks:** Click or tap the **"DHWANI CHAUHAN"** logo in the navigation header **5 times** in quick succession.
+2. **URL Parameter:** Access the website with a query parameter like `?edit=true` or `?admin=true` (e.g., `http://localhost:3000/?edit=true`).
+3. **Footer Lock Icon:** Scroll down to the footer and click the **Admin** lock icon next to the copyright text.
+
+Once the prompt appears, enter your passcode (default is **`admin123`**) to activate editing mode.
+
+### Configuring a Custom Passcode:
+To customize this password in your deployment (Vercel, Netlify, etc.) or local setup, configure the following environment variable:
+```env
+NEXT_PUBLIC_ADMIN_PASSWORD=your_custom_secure_passcode
+```
+
+### Logging Out:
+To hide all edit/delete/add buttons and secure your portfolio again, click the **LOGOUT ADMIN** button in the navigation header (or mobile drawer menu).
+
