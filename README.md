@@ -6,7 +6,7 @@
   Next.js · Tailwind · Three.js
 
 
-  [![React](https://img.shields.io/badge/React-18-20232a?style=for-the-badge&logo=react&logoColor=61dafb)](#)
+ 
   [![Next.js](https://img.shields.io/badge/Next.js-14.2.35-black?style=for-the-badge&logo=next.js&logoColor=white)](#)
   [![Three.js](https://img.shields.io/badge/Three.js-0.163-black?style=for-the-badge&logo=three.js&logoColor=white)](#)
   [![Tailwind](https://img.shields.io/badge/Tailwind_CSS-3.4-38bdf8?style=for-the-badge&logo=tailwind-css&logoColor=white)](#)
