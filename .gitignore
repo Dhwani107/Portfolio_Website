@@ -1,0 +1,16 @@
+# Dependency directories
+**/node_modules/
+
+# Next.js build output
+**/.next/
+**/out/
+
+# Caches
+.eslintcache
+
+# Local env files
+.env*.local
+
+# OS Files
+.DS_Store
+Thumbs.db
