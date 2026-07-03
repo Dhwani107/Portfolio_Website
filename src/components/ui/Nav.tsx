@@ -1,6 +1,10 @@
 'use client'
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useStore } from '@/lib/store'
+import Modal, { Field, Btn } from '@/components/ui/Modal'
+import toast from 'react-hot-toast'
+import { Lock } from 'lucide-react'
 
 const NAV = [
   { label: 'Work',         href: '#projects'     },
@@ -16,9 +20,70 @@ export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false)
   const { scrollY } = useScroll()
   
+  // Admin passcode states and triggers
+  const { isAdmin, setAdmin } = useStore()
+  const [loginOpen, setLoginOpen] = useState(false)
+  const [passcode, setPasscode] = useState('')
+  const [clickCount, setClickCount] = useState(0)
+  const [resetTimer, setResetTimer] = useState<NodeJS.Timeout | null>(null)
+
   useMotionValueEvent(scrollY, 'change', y => {
     setScrolled(y > 50)
   })
+
+  // URL query check (?edit=true or ?admin=true) on load
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      if (params.get('edit') === 'true' || params.get('admin') === 'true') {
+        setLoginOpen(true)
+        // Clean query parameter from URL
+        const newUrl = window.location.pathname
+        window.history.replaceState({}, '', newUrl)
+      }
+    }
+  }, [])
+
+  // Event listener for opening admin login from other parts (e.g. Footer)
+  useEffect(() => {
+    const handleOpenAdminLogin = () => {
+      setLoginOpen(true)
+    }
+    window.addEventListener('open-admin-login', handleOpenAdminLogin)
+    return () => {
+      window.removeEventListener('open-admin-login', handleOpenAdminLogin)
+    }
+  }, [])
+
+  const handleLogoClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    if (resetTimer) clearTimeout(resetTimer)
+    
+    const nextCount = clickCount + 1
+    if (nextCount >= 5) {
+      setLoginOpen(true)
+      setClickCount(0)
+      toast.success('Admin passcode required')
+    } else {
+      setClickCount(nextCount)
+      const timer = setTimeout(() => {
+        setClickCount(0)
+      }, 2000)
+      setResetTimer(timer)
+    }
+  }
+
+  const handleVerifyPasscode = () => {
+    const correctPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'admin123'
+    if (passcode === correctPassword) {
+      setAdmin(true)
+      toast.success('Admin editing mode enabled')
+      setLoginOpen(false)
+      setPasscode('')
+    } else {
+      toast.error('Incorrect passcode')
+    }
+  }
 
   return (
     <>
@@ -43,9 +108,9 @@ export default function Nav() {
           }}
         >
           {/* Logo Brand with glowing diamond */}
-          <a href="#hero" className="flex items-center gap-2 group">
-            <div className="w-2 h-2 bg-void border border-gold rotate-45 flex items-center justify-center shrink-0">
-              <div className="w-1 h-1 bg-gold rounded-full transition-transform duration-300 group-hover:scale-125" />
+          <a href="#hero" onClick={handleLogoClick} className="flex items-center gap-2 group cursor-pointer select-none">
+            <div className="w-2.5 h-2.5 bg-void border border-gold rotate-45 flex items-center justify-center shrink-0">
+              <div className="w-1.5 h-1.5 bg-gold rounded-full transition-transform duration-300 group-hover:scale-125" />
             </div>
             <span className="label text-gold tracking-widest transition-colors duration-300 group-hover:text-gold-light" style={{ fontSize: '0.78rem', fontWeight: 600 }}>
               DHWANI CHAUHAN
@@ -70,14 +135,25 @@ export default function Nav() {
             ))}
           </div>
 
-          {/* CTA Button */}
-          <a 
-            href="#contact"
-            className="hidden lg:block label text-void bg-gold border border-gold px-6 py-2.5 rounded-full transition-all duration-300 hover:bg-transparent hover:text-gold hover:border-gold/50"
-            style={{ fontSize: '0.7rem', fontWeight: 600 }}
-          >
-            HIRE ME
-          </a>
+          {/* CTA / Admin status Buttons */}
+          <div className="hidden lg:flex items-center gap-3">
+            {isAdmin && (
+              <button 
+                onClick={() => { setAdmin(false); toast.success('Logged out from admin mode') }}
+                className="label text-red-400 border border-red-400/20 px-5 py-2.5 rounded-full transition-all duration-300 hover:bg-red-400/5 hover:border-red-400/50 flex items-center gap-1.5 cursor-pointer"
+                style={{ fontSize: '0.7rem', fontWeight: 600 }}
+              >
+                <Lock size={12} /> LOGOUT ADMIN
+              </button>
+            )}
+            <a 
+              href="#contact"
+              className="label text-void bg-gold border border-gold px-6 py-2.5 rounded-full transition-all duration-300 hover:bg-transparent hover:text-gold hover:border-gold/50"
+              style={{ fontSize: '0.7rem', fontWeight: 600 }}
+            >
+              HIRE ME
+            </a>
+          </div>
 
           {/* Mobile hamburger menu */}
           <button onClick={() => setMenuOpen(v => !v)} className="lg:hidden flex flex-col gap-1.5 p-2 rounded-full hover:bg-gold/5 transition-colors shrink-0">
@@ -104,6 +180,15 @@ export default function Nav() {
             {item.label}
           </a>
         ))}
+        {isAdmin && (
+          <button 
+            onClick={() => { setAdmin(false); setMenuOpen(false); toast.success('Logged out from admin mode') }}
+            className="label text-red-400 border border-red-400/25 px-10 py-3 rounded-full hover:bg-red-400/5 hover:border-red-400 flex items-center gap-2"
+            style={{ fontSize: '0.78rem', fontWeight: 600 }}
+          >
+            <Lock size={14} /> LOGOUT ADMIN
+          </button>
+        )}
         <a 
           href="#contact" 
           onClick={() => setMenuOpen(false)}
@@ -113,6 +198,27 @@ export default function Nav() {
           HIRE ME
         </a>
       </motion.div>
+
+      {/* Admin Login Passcode Modal */}
+      <Modal open={loginOpen} onClose={() => { setLoginOpen(false); setPasscode('') }} title="ADMIN AUTHENTICATION">
+        <div className="flex flex-col gap-5">
+          <Field label="ENTER PASSCODE">
+            <input 
+              type="password" 
+              className="field" 
+              value={passcode} 
+              onChange={e => setPasscode(e.target.value)} 
+              onKeyDown={e => { if (e.key === 'Enter') handleVerifyPasscode() }}
+              placeholder="••••••••"
+              autoFocus
+            />
+          </Field>
+          <div className="flex gap-3 pt-3 border-t border-gold/10">
+            <Btn onClick={handleVerifyPasscode}>VERIFY</Btn>
+            <Btn variant="ghost" onClick={() => { setLoginOpen(false); setPasscode('') }}>CANCEL</Btn>
+          </div>
+        </div>
+      </Modal>
     </>
   )
 }

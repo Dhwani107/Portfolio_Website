@@ -31,6 +31,7 @@ function ProjectCard({ p, i, onEdit, onDelete }: {
   p: Project; i: number; onEdit: () => void; onDelete: () => void
 }) {
   const [hov, setHov] = useState(false)
+  const { isAdmin } = useStore()
   return (
     <motion.article
       layout
@@ -93,10 +94,12 @@ function ProjectCard({ p, i, onEdit, onDelete }: {
             {p.github && <a href={p.github} target="_blank" className="text-mist hover:text-gold transition-colors duration-300"><Github size={15} /></a>}
             {p.live   && <a href={p.live}   target="_blank" className="text-mist hover:text-gold transition-colors duration-300"><ExternalLink size={15} /></a>}
           </div>
-          <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <button onClick={onEdit}   className="label text-gold/65 hover:text-gold flex items-center gap-1 transition-colors" style={{ fontSize: '0.58rem' }}><Pencil size={11} /> Edit</button>
-            <button onClick={onDelete} className="label text-red-400/55 hover:text-red-400 flex items-center gap-1 transition-colors" style={{ fontSize: '0.58rem' }}><Trash2 size={11} /> Delete</button>
-          </div>
+          {isAdmin && (
+            <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <button onClick={onEdit}   className="label text-gold/65 hover:text-gold flex items-center gap-1 transition-colors" style={{ fontSize: '0.58rem' }}><Pencil size={11} /> Edit</button>
+              <button onClick={onDelete} className="label text-red-400/55 hover:text-red-400 flex items-center gap-1 transition-colors" style={{ fontSize: '0.58rem' }}><Trash2 size={11} /> Delete</button>
+            </div>
+          )}
         </div>
       </div>
     </motion.article>
@@ -134,7 +137,7 @@ function ProjectForm({ initial, onSave, onClose }: { initial?: Project; onSave: 
 }
 
 export default function Projects() {
-  const { projects, addProject, updateProject, deleteProject } = useStore()
+  const { projects, addProject, updateProject, deleteProject, isAdmin } = useStore()
   const [addOpen, setAddOpen] = useState(false)
   const [editing, setEditing] = useState<Project|null>(null)
   const headRef = useReveal()
@@ -155,10 +158,12 @@ export default function Projects() {
             <p className="section-number mb-4">01 — Selected Work</p>
             <h2 className="display-lg text-ivory">Projects</h2>
           </div>
-          <button onClick={() => setAddOpen(true)}
-            className="label text-gold/65 hover:text-gold border border-gold/20 hover:border-gold/50 px-6 py-3 flex items-center gap-2 transition-all duration-300" style={{ fontSize: '0.73rem' }}>
-            <Plus size={14} /> ADD PROJECT
-          </button>
+          {isAdmin && (
+            <button onClick={() => setAddOpen(true)}
+              className="label text-gold/65 hover:text-gold border border-gold/20 hover:border-gold/50 px-6 py-3 flex items-center gap-2 transition-all duration-300" style={{ fontSize: '0.73rem' }}>
+              <Plus size={14} /> ADD PROJECT
+            </button>
+          )}
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

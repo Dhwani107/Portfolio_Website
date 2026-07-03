@@ -9,6 +9,7 @@ import Modal, { Field, Btn } from '@/components/ui/Modal'
 
 function CertCard({ cert, i, onEdit, onDelete }: { cert: Certificate; i: number; onEdit: () => void; onDelete: () => void }) {
   const ref = useReveal()
+  const { isAdmin } = useStore()
   return (
     <motion.div ref={ref} className="reveal glass glass-hover corner-tl p-7 group relative overflow-hidden"
       style={{ borderRadius: '2px' }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
@@ -25,10 +26,12 @@ function CertCard({ cert, i, onEdit, onDelete }: { cert: Certificate; i: number;
             {cert.url
               ? <a href={cert.url} target="_blank" className="label text-gold/55 hover:text-gold flex items-center gap-1.5 transition-colors" style={{ fontSize: '0.67rem' }}><ExternalLink size={11} /> Verify</a>
               : <span />}
-            <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-              <button onClick={onEdit}   className="text-gold/40 hover:text-gold transition-colors"><Pencil size={12} /></button>
-              <button onClick={onDelete} className="text-red-400/40 hover:text-red-400 transition-colors"><Trash2 size={12} /></button>
-            </div>
+            {isAdmin && (
+              <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button onClick={onEdit}   className="text-gold/40 hover:text-gold transition-colors"><Pencil size={12} /></button>
+                <button onClick={onDelete} className="text-red-400/40 hover:text-red-400 transition-colors"><Trash2 size={12} /></button>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -52,7 +55,7 @@ function CertForm({ initial, onSave, onClose }: { initial?: Certificate; onSave:
 }
 
 export default function Certificates() {
-  const { certificates, addCertificate, updateCertificate, deleteCertificate } = useStore()
+  const { certificates, addCertificate, updateCertificate, deleteCertificate, isAdmin } = useStore()
   const [addOpen, setAddOpen] = useState(false)
   const [editing, setEditing] = useState<Certificate|null>(null)
   const headRef = useReveal()
@@ -68,10 +71,12 @@ export default function Certificates() {
             <p className="section-number mb-4">05 — Credentials</p>
             <h2 className="display-lg text-ivory">Certificates</h2>
           </div>
-          <button onClick={() => setAddOpen(true)}
-            className="label text-gold/65 hover:text-gold border border-gold/20 hover:border-gold/50 px-6 py-3 flex items-center gap-2 transition-all duration-300" style={{ fontSize: '0.73rem' }}>
-            <Plus size={14} /> ADD
-          </button>
+          {isAdmin && (
+            <button onClick={() => setAddOpen(true)}
+              className="label text-gold/65 hover:text-gold border border-gold/20 hover:border-gold/50 px-6 py-3 flex items-center gap-2 transition-all duration-300" style={{ fontSize: '0.73rem' }}>
+              <Plus size={14} /> ADD
+            </button>
+          )}
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           <AnimatePresence>

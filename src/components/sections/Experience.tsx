@@ -9,6 +9,7 @@ import Modal, { Field, Btn } from '@/components/ui/Modal'
 
 function ExpItem({ exp, i, onEdit, onDelete }: { exp: WorkExperience; i: number; onEdit: () => void; onDelete: () => void }) {
   const ref = useReveal()
+  const { isAdmin } = useStore()
   return (
     <div ref={ref} className="reveal grid md:grid-cols-[220px_1fr] gap-10 py-12 border-b border-gold/8 group">
       <div>
@@ -19,10 +20,12 @@ function ExpItem({ exp, i, onEdit, onDelete }: { exp: WorkExperience; i: number;
         style={{ '--tw-shadow': '0 0 10px rgba(201,168,76,0.5)' } as any}>
         <div className="flex items-start justify-between gap-4">
           <h3 className="display-md text-ivory mb-5">{exp.role}</h3>
-          <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-            <button onClick={onEdit}   className="text-gold/40 hover:text-gold transition-colors p-1"><Pencil size={14} /></button>
-            <button onClick={onDelete} className="text-red-400/40 hover:text-red-400 transition-colors p-1"><Trash2 size={14} /></button>
-          </div>
+          {isAdmin && (
+            <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+              <button onClick={onEdit}   className="text-gold/40 hover:text-gold transition-colors p-1"><Pencil size={14} /></button>
+              <button onClick={onDelete} className="text-red-400/40 hover:text-red-400 transition-colors p-1"><Trash2 size={14} /></button>
+            </div>
+          )}
         </div>
         <p className="body-sm mb-7 leading-relaxed">{exp.description}</p>
         <div className="flex flex-wrap gap-2">
@@ -53,7 +56,7 @@ function ExpForm({ initial, onSave, onClose }: { initial?: WorkExperience; onSav
 }
 
 export default function Experience() {
-  const { experiences, addExperience, updateExperience, deleteExperience } = useStore()
+  const { experiences, addExperience, updateExperience, deleteExperience, isAdmin } = useStore()
   const [addOpen, setAddOpen] = useState(false)
   const [editing, setEditing] = useState<WorkExperience|null>(null)
   const headRef = useReveal()
@@ -73,10 +76,12 @@ export default function Experience() {
             <p className="section-number mb-4">03 — Career</p>
             <h2 className="display-lg text-ivory">Experience</h2>
           </div>
-          <button onClick={() => setAddOpen(true)}
-            className="label text-gold/65 hover:text-gold border border-gold/20 hover:border-gold/50 px-6 py-3 flex items-center gap-2 transition-all duration-300" style={{ fontSize: '0.73rem' }}>
-            <Plus size={14} /> ADD
-          </button>
+          {isAdmin && (
+            <button onClick={() => setAddOpen(true)}
+              className="label text-gold/65 hover:text-gold border border-gold/20 hover:border-gold/50 px-6 py-3 flex items-center gap-2 transition-all duration-300" style={{ fontSize: '0.73rem' }}>
+              <Plus size={14} /> ADD
+            </button>
+          )}
         </div>
         <AnimatePresence>
           {experiences.map((exp, i) => (

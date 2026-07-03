@@ -9,6 +9,7 @@ import Modal, { Field, Btn } from '@/components/ui/Modal'
 
 function EduRow({ ed, onEdit, onDelete }: { ed: Education; onEdit: () => void; onDelete: () => void }) {
   const ref = useReveal()
+  const { isAdmin } = useStore()
   return (
     <motion.div
       ref={ref}
@@ -57,14 +58,16 @@ function EduRow({ ed, onEdit, onDelete }: { ed: Education; onEdit: () => void; o
         )}
 
         {/* Hover actions */}
-        <div className="flex gap-4 mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <button onClick={onEdit} className="label text-gold/65 hover:text-gold flex items-center gap-1 transition-colors" style={{ fontSize: '0.58rem' }}>
-            <Pencil size={11} /> Edit
-          </button>
-          <button onClick={onDelete} className="label text-red-400/55 hover:text-red-400 flex items-center gap-1 transition-colors" style={{ fontSize: '0.58rem' }}>
-            <Trash2 size={11} /> Delete
-          </button>
-        </div>
+        {isAdmin && (
+          <div className="flex gap-4 mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button onClick={onEdit} className="label text-gold/65 hover:text-gold flex items-center gap-1 transition-colors" style={{ fontSize: '0.58rem' }}>
+              <Pencil size={11} /> Edit
+            </button>
+            <button onClick={onDelete} className="label text-red-400/55 hover:text-red-400 flex items-center gap-1 transition-colors" style={{ fontSize: '0.58rem' }}>
+              <Trash2 size={11} /> Delete
+            </button>
+          </div>
+        )}
       </div>
     </motion.div>
   )
@@ -94,7 +97,7 @@ function EduForm({ initial, onSave, onClose }: { initial?: Education; onSave: (d
 }
 
 export default function Edu() {
-  const { educations, addEducation, updateEducation, deleteEducation } = useStore()
+  const { educations, addEducation, updateEducation, deleteEducation, isAdmin } = useStore()
   const [addOpen, setAddOpen] = useState(false)
   const [editing, setEditing] = useState<Education|null>(null)
   const headRef = useReveal()
@@ -114,10 +117,12 @@ export default function Edu() {
             <p className="section-number mb-4">04 — Academic</p>
             <h2 className="display-lg text-ivory">Education</h2>
           </div>
-          <button onClick={() => setAddOpen(true)}
-            className="label text-gold/65 hover:text-gold border border-gold/20 hover:border-gold/50 px-6 py-3 flex items-center gap-2 transition-all duration-300 rounded-sm" style={{ fontSize: '0.73rem' }}>
-            <Plus size={14} /> ADD
-          </button>
+          {isAdmin && (
+            <button onClick={() => setAddOpen(true)}
+              className="label text-gold/65 hover:text-gold border border-gold/20 hover:border-gold/50 px-6 py-3 flex items-center gap-2 transition-all duration-300 rounded-sm" style={{ fontSize: '0.73rem' }}>
+              <Plus size={14} /> ADD
+            </button>
+          )}
         </div>
 
         {/* Vertical Timeline container */}

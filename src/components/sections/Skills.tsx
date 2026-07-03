@@ -137,7 +137,7 @@ const itemVariants = {
 }
 
 export default function Skills() {
-  const { skills, addSkill, updateSkill, deleteSkill } = useStore()
+  const { skills, addSkill, updateSkill, deleteSkill, isAdmin } = useStore()
   const [addOpen, setAddOpen] = useState(false)
   const [editing, setEditing] = useState<Skill|null>(null)
   const headRef = useReveal()
@@ -157,10 +157,12 @@ export default function Skills() {
             <p className="section-number mb-4">02 — Expertise</p>
             <h2 className="display-lg text-ivory">Skills</h2>
           </div>
-          <button onClick={() => setAddOpen(true)}
-            className="label text-gold/65 hover:text-gold border border-gold/20 hover:border-gold/50 px-6 py-3 flex items-center gap-2 transition-all duration-300 rounded-sm" style={{ fontSize: '0.73rem' }}>
-            <Plus size={14} /> ADD SKILL
-          </button>
+          {isAdmin && (
+            <button onClick={() => setAddOpen(true)}
+              className="label text-gold/65 hover:text-gold border border-gold/20 hover:border-gold/50 px-6 py-3 flex items-center gap-2 transition-all duration-300 rounded-sm" style={{ fontSize: '0.73rem' }}>
+              <Plus size={14} /> ADD SKILL
+            </button>
+          )}
         </div>
 
         {/* Categories Grid */}
@@ -228,10 +230,12 @@ export default function Skills() {
                           <span className="text-xs text-mist group-hover/pill:text-ivory transition-colors font-sans font-normal" style={{ fontSize: '0.74rem' }}>{s.name}</span>
                           
                           {/* Actions inside the pill */}
-                          <div className="flex gap-1.5 opacity-0 group-hover/pill:opacity-100 transition-opacity ml-1 shrink-0">
-                            <button onClick={() => setEditing(s)} className="text-gold/45 hover:text-gold transition-colors"><Pencil size={10} /></button>
-                            <button onClick={() => { deleteSkill(s.id); toast.success('Skill removed') }} className="text-red-400/40 hover:text-red-400 transition-colors"><Trash2 size={10} /></button>
-                          </div>
+                          {isAdmin && (
+                            <div className="flex gap-1.5 opacity-0 group-hover/pill:opacity-100 transition-opacity ml-1 shrink-0">
+                              <button onClick={() => setEditing(s)} className="text-gold/45 hover:text-gold transition-colors"><Pencil size={10} /></button>
+                              <button onClick={() => { deleteSkill(s.id); toast.success('Skill removed') }} className="text-red-400/40 hover:text-red-400 transition-colors"><Trash2 size={10} /></button>
+                            </div>
+                          )}
                         </motion.div>
                       )
                     })

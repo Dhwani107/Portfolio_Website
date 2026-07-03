@@ -213,6 +213,8 @@ const defaultEducations: Education[] = [
 ]
 
 interface Store {
+  isAdmin: boolean
+  setAdmin: (isAdmin: boolean) => void
   projects: Project[]; skills: Skill[]; experiences: WorkExperience[]
   certificates: Certificate[]; educations: Education[]
   addProject:       (p:  Omit<Project,'id'>)        => void
@@ -233,6 +235,8 @@ interface Store {
 }
 
 export const useStore = create<Store>()(persist((set) => ({
+  isAdmin: false,
+  setAdmin: (isAdmin) => set({ isAdmin }),
   projects: defaultProjects, skills: defaultSkills,
   experiences: defaultExperiences, certificates: defaultCertificates, educations: defaultEducations,
 

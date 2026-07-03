@@ -1,4 +1,9 @@
+'use client'
+import { useStore } from '@/lib/store'
+import { Lock } from 'lucide-react'
+
 export default function Footer() {
+  const { isAdmin } = useStore()
   return (
     <footer className="border-t border-gold/8 py-12 px-8 relative overflow-hidden bg-void">
       {/* Background ambient light */}
@@ -40,9 +45,24 @@ export default function Footer() {
         {/* Bottom Row: Copyright, Tech Stack, Links */}
         <div className="flex flex-col lg:flex-row items-center justify-between gap-6 pt-2">
           {/* Copyright */}
-          <span className="label text-mist/35 text-center lg:text-left" style={{ fontSize: '0.65rem' }}>
-            &copy; 2026 Dhwani. All rights reserved.
-          </span>
+          <div className="flex items-center text-center lg:text-left">
+            <span className="label text-mist/35" style={{ fontSize: '0.65rem' }}>
+              &copy; 2026 Dhwani. All rights reserved.
+            </span>
+            {!isAdmin ? (
+              <button 
+                onClick={() => window.dispatchEvent(new CustomEvent('open-admin-login'))}
+                className="hover:text-gold transition-colors ml-2.5 text-mist/35 flex items-center gap-1 inline-flex cursor-pointer"
+                style={{ fontSize: '0.65rem' }}
+              >
+                <Lock size={10} /> Admin
+              </button>
+            ) : (
+              <span className="text-gold/50 ml-2.5 inline-flex items-center gap-1" style={{ fontSize: '0.65rem' }}>
+                &middot; Admin Active
+              </span>
+            )}
+          </div>
 
           {/* Terms & Privacy */}
           <div className="flex items-center gap-3 text-mist/35" style={{ fontSize: '0.65rem' }}>
