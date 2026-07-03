@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/main/People%20with%20activities/Astronaut.webp" alt="Astronaut" width="120" height="120" />
+  <img src="https://raw.githubusercontent.com/Dhwani107/Portfolio_Website/main/src/app/icon.svg" alt="Dhwani Chauhan Logo" width="100" height="100" />
 
   # Portfolio
 
