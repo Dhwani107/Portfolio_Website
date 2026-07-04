@@ -5,7 +5,7 @@ import { Lock } from 'lucide-react'
 export default function Footer() {
   const { isAdmin } = useStore()
   return (
-    <footer className="border-t border-gold/8 py-12 px-8 relative overflow-hidden bg-void">
+    <footer className="border-t border-gold/8 py-12 px-4 sm:px-8 relative overflow-hidden bg-void">
       {/* Background ambient light */}
       <div className="orb-a absolute bottom-0 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(201,168,76,0.03), transparent 75%)' }} />

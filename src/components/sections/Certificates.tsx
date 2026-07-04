@@ -1,17 +1,20 @@
 'use client'
-import { useState } from 'react'
+import React, { useState } from 'react'
+import dynamic from 'next/dynamic'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Plus, Pencil, Trash2, ExternalLink, Award } from 'lucide-react'
+import { Plus, Pencil, Trash2, ExternalLink, Award, X } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useStore, Certificate } from '@/lib/store'
 import { useReveal } from '@/lib/useReveal'
-import Modal, { Field, Btn } from '@/components/ui/Modal'
+import Modal from '@/components/ui/Modal'
 
-function CertCard({ cert, i, onEdit, onDelete }: { cert: Certificate; i: number; onEdit: () => void; onDelete: () => void }) {
+const CertForm = dynamic(() => import('./CertificatesForm'))
+
+const CertCard = React.memo(function CertCard({ cert, i, onEdit, onDelete, onView }: { cert: Certificate; i: number; onEdit: () => void; onDelete: () => void; onView: () => void }) {
   const ref = useReveal()
   const { isAdmin } = useStore()
   return (
-    <motion.div ref={ref} className="reveal glass glass-hover corner-tl p-7 group relative overflow-hidden"
+    <motion.div ref={ref} onClick={onView} className="reveal glass glass-hover corner-tl p-7 group relative overflow-hidden cursor-pointer"
       style={{ borderRadius: '2px' }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       <Award size={90} className="absolute -right-5 -top-5 pointer-events-none" style={{ color: 'rgba(201,168,76,0.04)' }} />
       <div className="flex items-start gap-5">
@@ -22,7 +25,7 @@ function CertCard({ cert, i, onEdit, onDelete }: { cert: Certificate; i: number;
           <p className="label text-gold/55 mb-2" style={{ fontSize: '0.67rem' }}>{cert.issuer} · {cert.date}</p>
           <h3 className="font-sans text-ivory leading-snug mb-4" style={{ fontSize: '1rem', fontWeight: 300 }}>{cert.title}</h3>
           {cert.credentialId && <p className="font-mono text-mist/55" style={{ fontSize: '0.7rem' }}>ID: {cert.credentialId}</p>}
-          <div className="flex items-center justify-between mt-4">
+          <div className="flex items-center justify-between mt-4" onClick={e => e.stopPropagation()}>
             {cert.url
               ? <a href={cert.url} target="_blank" className="label text-gold/55 hover:text-gold flex items-center gap-1.5 transition-colors" style={{ fontSize: '0.67rem' }}><ExternalLink size={11} /> Verify</a>
               : <span />}
@@ -37,31 +40,18 @@ function CertCard({ cert, i, onEdit, onDelete }: { cert: Certificate; i: number;
       </div>
     </motion.div>
   )
-}
-
-function CertForm({ initial, onSave, onClose }: { initial?: Certificate; onSave: (d: Omit<Certificate,'id'>) => void; onClose: () => void }) {
-  const [f, setF] = useState({ title: initial?.title??'', issuer: initial?.issuer??'', date: initial?.date??'', credentialId: initial?.credentialId??'', url: initial?.url??'' })
-  return (
-    <div className="flex flex-col gap-5">
-      {([['title','CERTIFICATE TITLE *'],['issuer','ISSUER *'],['date','DATE'],['credentialId','CREDENTIAL ID'],['url','VERIFY URL']] as const).map(([k,l])=>(
-        <Field key={k} label={l}><input className="field" value={(f as any)[k]} onChange={e=>setF(p=>({...p,[k]:e.target.value}))} placeholder={k==='url'?'https://...':''} /></Field>
-      ))}
-      <div className="flex gap-3 pt-3 border-t border-gold/10">
-        <Btn onClick={()=>{ if(!f.title||!f.issuer){toast.error('Title & issuer required');return} onSave(f);onClose() }}>{initial?'UPDATE':'ADD CERTIFICATE'}</Btn>
-        <Btn variant="ghost" onClick={onClose}>CANCEL</Btn>
-      </div>
-    </div>
-  )
-}
+})
 
 export default function Certificates() {
   const { certificates, addCertificate, updateCertificate, deleteCertificate, isAdmin } = useStore()
   const [addOpen, setAddOpen] = useState(false)
   const [editing, setEditing] = useState<Certificate|null>(null)
+  const [viewingImage, setViewingImage] = useState<string|null>(null)
+  const [imageError, setImageError] = useState(false)
   const headRef = useReveal()
 
   return (
-    <section id="certificates" className="py-36 px-8 relative overflow-hidden">
+    <section id="certificates" className="py-24 md:py-36 px-4 sm:px-8 relative overflow-hidden">
       <div className="orb-b absolute -bottom-20 right-0 w-64 h-64 rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(201,168,76,0.04), transparent 70%)' }} />
       <div className="max-w-5xl mx-auto">
@@ -80,12 +70,67 @@ export default function Certificates() {
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           <AnimatePresence>
-            {certificates.map((c, i) => <CertCard key={c.id} cert={c} i={i} onEdit={() => setEditing(c)} onDelete={() => { deleteCertificate(c.id); toast.success('Removed') }} />)}
+            {certificates.map((c, i) => (
+              <CertCard
+                key={c.id}
+                cert={c}
+                i={i}
+                onEdit={() => setEditing(c)}
+                onDelete={() => { deleteCertificate(c.id); toast.success('Removed') }}
+                onView={() => { setImageError(false); setViewingImage(`/images/${c.title}.png`); }}
+              />
+            ))}
           </AnimatePresence>
         </div>
       </div>
       <Modal open={addOpen} onClose={() => setAddOpen(false)} title="NEW CERTIFICATE"><CertForm onSave={d => { addCertificate(d); toast.success('Added') }} onClose={() => setAddOpen(false)} /></Modal>
       <Modal open={!!editing} onClose={() => setEditing(null)} title="EDIT CERTIFICATE">{editing && <CertForm initial={editing} onSave={d => { updateCertificate(editing.id, d); toast.success('Updated') }} onClose={() => setEditing(null)} />}</Modal>
+
+      <AnimatePresence>
+        {viewingImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => { setViewingImage(null); setImageError(false); }}
+            className="fixed inset-0 z-[10000] bg-void/95 backdrop-blur-md flex items-center justify-center p-4 cursor-zoom-out"
+          >
+            <motion.div
+              initial={{ scale: 0.95, y: 10 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 10 }}
+              transition={{ ease: [0.16, 1, 0.3, 1], duration: 0.4 }}
+              className="relative max-w-4xl max-h-[85vh] flex items-center justify-center"
+              onClick={e => e.stopPropagation()}
+            >
+              <button
+                onClick={() => { setViewingImage(null); setImageError(false); }}
+                className="absolute -top-14 right-0 md:-right-14 text-mist hover:text-ivory p-2.5 bg-obsidian/80 border border-gold/15 hover:border-gold/40 rounded-full transition-all duration-300"
+              >
+                <X size={20} />
+              </button>
+              
+              {imageError ? (
+                <div className="w-[500px] max-w-full aspect-[4/3] bg-obsidian border border-gold/20 flex flex-col items-center justify-center p-8 text-center gap-4">
+                  <Award size={48} className="text-gold/40 animate-pulse" />
+                  <h4 className="font-sans text-ivory text-lg font-light">Certificate Image Not Found</h4>
+                  <p className="font-sans text-mist text-xs leading-relaxed max-w-xs">
+                    Please place the certificate image file in your project folder under:<br />
+                    <code className="text-gold bg-gold/5 px-1.5 py-0.5 rounded font-mono text-[0.75rem] block mt-2 whitespace-pre-wrap select-all">public/images/{decodeURIComponent(viewingImage.split('/').pop() || '')}</code>
+                  </p>
+                </div>
+              ) : (
+                <img
+                  src={viewingImage}
+                  alt="Certificate"
+                  className="max-w-full max-h-[80vh] object-contain border border-gold/20 shadow-2xl"
+                  onError={() => setImageError(true)}
+                />
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   )
 }

@@ -9,7 +9,7 @@ const SOCIALS = [
   { Icon: Github,   label:'GitHub',   href:'https://github.com/Dhwani107',                          sub:'github.com/Dhwani107'             },
   { Icon: Linkedin, label:'LinkedIn', href:'https://www.linkedin.com/in/dhwani-chauhan-aaa5ab280/', sub:'/dhwani-chauhan-aaa5ab280'        },
   { Icon: Mail,     label:'Email',    href:'mailto:dhwanichauhan1072004@gmail.com',                 sub:'dhwanichauhan1072004@gmail.com'   },
-  { Icon: Phone,    label:'Phone',    href:'tel:+919674310571',                                     sub:'+91 96743 10571'                  },
+  { Icon: Phone,    label:'Phone',    href:'tel:+919674310xxx',                                     sub:'+91 96743 10xxx'                  },
 ]
 
 function Brackets({ children }: { children: React.ReactNode }) {
@@ -41,7 +41,7 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="py-36 px-8 relative overflow-hidden">
+    <section id="contact" className="py-24 md:py-36 px-4 sm:px-8 relative overflow-hidden">
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[700px] h-[280px] rounded-full pointer-events-none"
         style={{ background:'radial-gradient(ellipse, rgba(201,168,76,0.06), transparent 70%)', filter:'blur(40px)' }} />
       <div className="parallax-float absolute top-20 right-16 w-px h-56 pointer-events-none"
@@ -56,7 +56,7 @@ export default function Contact() {
           <h2 className="display-lg text-ivory">Let&apos;s Work<br/><span className="gold-shimmer">Together</span></h2>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-20">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-20">
           <div ref={leftRef} className="reveal-left">
             <p className="body-lg leading-relaxed mb-12" style={{ color:'#C0C0D4', fontSize:'1.1rem' }}>
               I&apos;m actively looking for AI/ML engineering roles, data science internships, and exciting

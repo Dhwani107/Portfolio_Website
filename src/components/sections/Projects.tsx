@@ -1,11 +1,14 @@
 'use client'
-import { useState } from 'react'
+import React, { useState } from 'react'
+import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Github, ExternalLink, Plus, Pencil, Trash2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useStore, Project } from '@/lib/store'
 import { useReveal } from '@/lib/useReveal'
-import Modal, { Field, Btn } from '@/components/ui/Modal'
+import Modal from '@/components/ui/Modal'
+
+const ProjectForm = dynamic(() => import('./ProjectsForm'))
 
 /* Small ambient diamond */
 function Diamond({ style }: { style: React.CSSProperties }) {
@@ -27,17 +30,14 @@ function getImagePath(title: string): string {
   return '/images/moviefo.png';
 }
 
-function ProjectCard({ p, i, onEdit, onDelete }: {
+const ProjectCard = React.memo(function ProjectCard({ p, i, onEdit, onDelete }: {
   p: Project; i: number; onEdit: () => void; onDelete: () => void
 }) {
-  const [hov, setHov] = useState(false)
   const { isAdmin } = useStore()
   return (
     <motion.article
-      layout
       initial={{ opacity: 0, y: 44 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -24 }}
       transition={{ duration: 0.65, delay: i * 0.09, ease: [0.16, 1, 0.3, 1] }}
-      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
       className="glass glass-hover border-pulse relative overflow-hidden group hover:-translate-y-1 transition-all duration-300 hover:shadow-lg hover:shadow-gold/[0.02] flex flex-col h-full"
       style={{ borderRadius: '12px' }}
     >
@@ -55,12 +55,10 @@ function ProjectCard({ p, i, onEdit, onDelete }: {
       </div>
 
       {/* Scan line on hover */}
-      {hov && <div className="scan-line" />}
+      <div className="scan-line opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
       {/* Top accent */}
-      <motion.div className="absolute top-0 left-0 right-0 h-px bg-gold"
-        animate={{ scaleX: hov ? 1 : 0 }} initial={{ scaleX: 0 }}
-        style={{ transformOrigin: 'left' }} transition={{ duration: 0.45 }} />
+      <div className="absolute top-0 left-0 right-0 h-px bg-gold scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
 
       {/* BG index number */}
       <div className="absolute -right-3 -bottom-5 font-display leading-none font-bold pointer-events-none select-none"
@@ -81,7 +79,7 @@ function ProjectCard({ p, i, onEdit, onDelete }: {
 
         <div className="gold-line mb-4 opacity-50" />
 
-        <p className="text-xs text-mist leading-relaxed mb-4 flex-1 line-clamp-3 group-hover:line-clamp-none transition-all duration-300">{p.description}</p>
+        <p className="text-xs text-mist leading-relaxed mb-4 flex-1 line-clamp-4">{p.description}</p>
 
         <div className="flex flex-wrap gap-1.5 mb-5 shrink-0">
           {p.tags.map(t => (
@@ -104,37 +102,7 @@ function ProjectCard({ p, i, onEdit, onDelete }: {
       </div>
     </motion.article>
   )
-}
-
-function ProjectForm({ initial, onSave, onClose }: { initial?: Project; onSave: (d: Omit<Project,'id'>) => void; onClose: () => void }) {
-  const [f, setF] = useState({ title: initial?.title??'', category: initial?.category??'Web Application', year: initial?.year??new Date().getFullYear(), description: initial?.description??'', tags: initial?.tags.join(', ')??'', github: initial?.github??'', live: initial?.live??'', featured: initial?.featured??false, index: initial?.index??0, image: initial?.image??'' })
-  return (
-    <div className="flex flex-col gap-5">
-      <div className="grid grid-cols-2 gap-4">
-        <Field label="TITLE *"><input className="field" value={f.title} onChange={e=>setF(p=>({...p,title:e.target.value}))} placeholder="Project name" /></Field>
-        <Field label="CATEGORY"><input className="field" value={f.category} onChange={e=>setF(p=>({...p,category:e.target.value}))} placeholder="Web Application" /></Field>
-      </div>
-      <Field label="DESCRIPTION"><textarea rows={3} className="field" value={f.description} onChange={e=>setF(p=>({...p,description:e.target.value}))} placeholder="What makes it remarkable?" /></Field>
-      <Field label="TECH STACK (COMMA SEPARATED)"><input className="field" value={f.tags} onChange={e=>setF(p=>({...p,tags:e.target.value}))} placeholder="React, TypeScript, Node.js" /></Field>
-      <div className="grid grid-cols-2 gap-4">
-        <Field label="GITHUB URL"><input className="field" value={f.github} onChange={e=>setF(p=>({...p,github:e.target.value}))} /></Field>
-        <Field label="LIVE URL"><input className="field" value={f.live} onChange={e=>setF(p=>({...p,live:e.target.value}))} /></Field>
-      </div>
-      <Field label="IMAGE LINK"><input className="field" value={f.image} onChange={e=>setF(p=>({...p,image:e.target.value}))} placeholder="e.g. /images/moviefo.png or external https://..." /></Field>
-      <div className="flex items-center gap-3">
-        <button onClick={()=>setF(p=>({...p,featured:!p.featured}))}
-          className={`w-10 h-5 rounded-full border transition-all duration-300 relative ${f.featured?'bg-gold border-gold':'bg-transparent border-gold/25'}`}>
-          <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-void transition-all duration-300 ${f.featured?'left-5':'left-0.5'}`} />
-        </button>
-        <span className="label text-mist" style={{ fontSize: '0.68rem' }}>FEATURED PROJECT</span>
-      </div>
-      <div className="flex gap-3 pt-3 border-t border-gold/10">
-        <Btn onClick={()=>{ if(!f.title){toast.error('Title required');return} onSave({...f,tags:f.tags.split(',').map(t=>t.trim()).filter(Boolean)});onClose() }}>{initial?'UPDATE PROJECT':'ADD PROJECT'}</Btn>
-        <Btn variant="ghost" onClick={onClose}>CANCEL</Btn>
-      </div>
-    </div>
-  )
-}
+})
 
 export default function Projects() {
   const { projects, addProject, updateProject, deleteProject, isAdmin } = useStore()
@@ -143,7 +111,7 @@ export default function Projects() {
   const headRef = useReveal()
 
   return (
-    <section id="projects" className="py-36 px-8 relative overflow-hidden">
+    <section id="projects" className="py-24 md:py-36 px-4 sm:px-8 relative overflow-hidden">
       {/* Ambient bg orb */}
       <div className="orb-a absolute -top-40 -right-40 w-96 h-96 rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(201,168,76,0.04), transparent 70%)' }} />

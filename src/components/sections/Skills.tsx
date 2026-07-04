@@ -50,7 +50,7 @@ function getSkillIcon(name: string): { slug?: string; lucideIcon?: any } {
   if (n === 'numpy') return { slug: 'numpy' };
   if (n === 'pandas') return { slug: 'pandas' };
   if (n === 'scikit-learn') return { slug: 'scikitlearn' };
-  if (n === 'matplotlib') return { slug: 'matplotlib' };
+  if (n === 'matplotlib') return { lucideIcon: LineChart };
   if (n === 'tensorflow') return { slug: 'tensorflow' };
   if (n === 'pytorch') return { slug: 'pytorch' };
   if (n === 'langchain') return { slug: 'langchain' };
@@ -116,24 +116,11 @@ function SkillForm({ initial, onSave, onClose }: { initial?: Skill; onSave: (d: 
   )
 }
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.03
-    }
+const getColSpanClass = (cat: string) => {
+  if (cat === "Machine Learning & Data Science" || cat === "Generative AI & LLMs") {
+    return "lg:col-span-2"
   }
-}
-
-const itemVariants = {
-  hidden: { opacity: 0, scale: 0.92, y: 8 },
-  show: { 
-    opacity: 1, 
-    scale: 1, 
-    y: 0,
-    transition: { type: 'spring', stiffness: 260, damping: 20 }
-  }
+  return ""
 }
 
 export default function Skills() {
@@ -143,7 +130,7 @@ export default function Skills() {
   const headRef = useReveal()
 
   return (
-    <section id="skills" className="py-36 px-8 relative overflow-hidden"
+    <section id="skills" className="py-24 md:py-36 px-4 sm:px-8 relative overflow-hidden"
       style={{ background: 'linear-gradient(180deg, transparent, rgba(28,28,40,0.45), transparent)' }}>
       
       {/* Ambient orb */}
@@ -176,7 +163,7 @@ export default function Skills() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.05 }}
-                                className="glass p-6 rounded-xl border border-gold/10 hover:border-gold/30 hover:-translate-y-1 hover:shadow-lg hover:shadow-gold/5 transition-all duration-300 relative group overflow-hidden flex flex-col"
+                className={`glass p-6 rounded-xl border border-gold/10 hover:border-gold/30 hover:-translate-y-1 hover:shadow-lg hover:shadow-gold/5 transition-all duration-300 relative group overflow-hidden flex flex-col ${getColSpanClass(cat)}`}
               >
                 {/* Card top shimmer line */}
                 <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold/40 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
@@ -193,13 +180,7 @@ export default function Skills() {
                   {cat}
                 </h3>
 
-                <motion.div 
-                  variants={containerVariants}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true }}
-                  className="flex flex-wrap gap-2.5 content-start flex-1 relative z-10"
-                >
+                <div className="flex flex-wrap gap-2.5 content-start flex-1 relative z-10">
                   {filtered.length === 0 ? (
                     <span className="text-[0.7rem] text-mist/40 italic py-2">No skills added yet</span>
                   ) : (
@@ -207,9 +188,8 @@ export default function Skills() {
                       const { slug, lucideIcon } = getSkillIcon(s.name);
                       const LucideIconComp = lucideIcon || Code;
                       return (
-                        <motion.div
+                        <div
                           key={s.id}
-                          variants={itemVariants}
                           className="flex items-center gap-2.5 px-3.5 py-1.5 bg-obsidian/45 border border-gold/8 rounded-full hover:border-gold/40 hover:bg-gold/8 transition-all duration-300 group/pill cursor-default"
                         >
                           {slug ? (
@@ -236,11 +216,11 @@ export default function Skills() {
                               <button onClick={() => { deleteSkill(s.id); toast.success('Skill removed') }} className="text-red-400/40 hover:text-red-400 transition-colors"><Trash2 size={10} /></button>
                             </div>
                           )}
-                        </motion.div>
+                        </div>
                       )
                     })
                   )}
-                </motion.div>
+                </div>
               </motion.div>
             )
           })}

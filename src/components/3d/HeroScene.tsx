@@ -1,6 +1,6 @@
 'use client'
 import { useRef, useMemo } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Points, PointMaterial, MeshDistortMaterial } from '@react-three/drei'
 import * as THREE from 'three'
 
@@ -77,6 +77,11 @@ function CoreSphere() {
       solid.current.rotation.x = t * 0.06
       solid.current.rotation.y = t * 0.10
       solid.current.rotation.z = Math.sin(t * 0.035) * 0.12
+      // Dynamic breathing glow
+      const pulse = 0.22 + Math.sin(t * 1.5) * 0.06
+      if (solid.current.material) {
+        ;(solid.current.material as THREE.MeshStandardMaterial).emissiveIntensity = pulse
+      }
     }
     if (wire1.current) {
       wire1.current.rotation.x = -t * 0.045
@@ -96,11 +101,11 @@ function CoreSphere() {
   return (
     <group>
       <mesh ref={solid}>
-        <icosahedronGeometry args={[1.05, 4]} />
+        <icosahedronGeometry args={[1.05, 5]} />
         <MeshDistortMaterial
-          color="#1A1A26" emissive="#C9A84C" emissiveIntensity={0.22}
-          transparent opacity={0.94} roughness={0.1} metalness={0.9}
-          distort={0.12} speed={2.0}
+          color="#12121c" emissive="#C9A84C" emissiveIntensity={0.22}
+          transparent opacity={0.94} roughness={0.12} metalness={0.95}
+          distort={0.15} speed={1.8}
         />
       </mesh>
       {/* Dense inner wireframe */}
@@ -270,9 +275,31 @@ function NebulaBg() {
   )
 }
 
+/* ── Interactive Mouse Tilt Wrapper ─────────────────── */
+function InteractiveGroup({ children }: { children: React.ReactNode }) {
+  const groupRef = useRef<THREE.Group>(null)
+  const { width } = useThree().viewport
+
+  // Calculate responsive X / Y offset dynamically based on 3D viewport size:
+  // - On desktop: Shift the planet to the right (approx 22% of viewport width)
+  // - On mobile: Keep it centered (0) and offset slightly down to clear text overlays
+  const xOffset = width > 7.5 ? Math.min(width * 0.22, 2.8) : 0
+  const yOffset = width > 7.5 ? 0 : -0.5
+
+  useFrame((state) => {
+    if (!groupRef.current) return
+    // Smooth responsive lerping on cursor coordinates (-1 to 1)
+    const targetX = -state.mouse.y * 0.28
+    const targetY = state.mouse.x * 0.28
+    groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, targetX, 0.05)
+    groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, targetY, 0.05)
+  })
+  return <group ref={groupRef} position={[xOffset, yOffset, 0]}>{children}</group>
+}
+
 export default function HeroScene() {
   return (
-    <div className="absolute inset-0 z-0">
+    <div className="absolute inset-0 z-0 w-full h-full">
       <Canvas camera={{ position: [0, 0.6, 7], fov: 46 }} gl={{ antialias: true, alpha: true }}>
         <ambientLight intensity={0.1} />
         <pointLight position={[4, 5, 4]}    intensity={2.5}  color="#E8C96A" />
@@ -281,18 +308,22 @@ export default function HeroScene() {
         <pointLight position={[3, -4, 2]}   intensity={0.3}  color="#E8C96A" />
 
         <NebulaBg />
-        <GlowDisk />
-        <CoreSphere />
-        <OrbitalRings />
-        <GoldParticles />
+        
+        <InteractiveGroup>
+          <GlowDisk />
+          <CoreSphere />
+          <OrbitalRings />
+          
+          {/* Orbiting satellites — varied orbits */}
+          <Satellite radius={2.0}  speed={0.42} phase={0}             tilt={0.7} size={0.058} color="#E8C96A" />
+          <Satellite radius={2.5}  speed={0.28} phase={Math.PI}       tilt={0.5} size={0.042} color="#C9A84C" />
+          <Satellite radius={1.82} speed={0.58} phase={Math.PI/2}     tilt={1.2} size={0.036} color="#E8C96A" />
+          <Satellite radius={2.9}  speed={0.19} phase={Math.PI*1.5}   tilt={0.4} size={0.028} color="#8B6914" />
+          <Satellite radius={1.6}  speed={0.75} phase={Math.PI*0.7}   tilt={0.9} size={0.022} color="#E8C96A" />
+          <Satellite radius={3.2}  speed={0.14} phase={Math.PI*1.2}   tilt={0.3} size={0.018} color="#C9A84C" />
+        </InteractiveGroup>
 
-        {/* Orbiting octahedra — varied orbits */}
-        <Satellite radius={2.0}  speed={0.42} phase={0}             tilt={0.7} size={0.058} color="#E8C96A" />
-        <Satellite radius={2.5}  speed={0.28} phase={Math.PI}       tilt={0.5} size={0.042} color="#C9A84C" />
-        <Satellite radius={1.82} speed={0.58} phase={Math.PI/2}     tilt={1.2} size={0.036} color="#E8C96A" />
-        <Satellite radius={2.9}  speed={0.19} phase={Math.PI*1.5}   tilt={0.4} size={0.028} color="#8B6914" />
-        <Satellite radius={1.6}  speed={0.75} phase={Math.PI*0.7}   tilt={0.9} size={0.022} color="#E8C96A" />
-        <Satellite radius={3.2}  speed={0.14} phase={Math.PI*1.2}   tilt={0.3} size={0.018} color="#C9A84C" />
+        <GoldParticles />
 
         {/* Floating diamond shards far out */}
         <DiamondShard position={[-3.5,  1.5, -1]} speed={0.4} />

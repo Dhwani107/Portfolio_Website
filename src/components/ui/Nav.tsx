@@ -99,26 +99,26 @@ export default function Nav() {
         <div 
           className={`mx-auto flex items-center justify-between transition-all duration-500 rounded-full border bg-obsidian/45 backdrop-blur-xl ${
             scrolled 
-              ? 'max-w-4xl border-gold/20 shadow-lg shadow-void/80 px-6 py-2.5' 
-              : 'max-w-6xl border-gold/10 px-8 py-4'
+              ? 'max-w-4xl border-gold/20 shadow-lg shadow-gold/[0.03] px-6 py-2.5' 
+              : 'max-w-6xl border-white/[0.05] px-8 py-4'
           }`}
           style={{ 
             height: scrolled ? '54px' : '64px',
-            backgroundColor: scrolled ? 'rgba(10, 10, 15, 0.85)' : 'rgba(5, 5, 7, 0.35)'
+            backgroundColor: scrolled ? 'rgba(10, 10, 15, 0.88)' : 'rgba(5, 5, 7, 0.4)'
           }}
         >
           {/* Logo Brand with glowing diamond */}
-          <a href="#hero" onClick={handleLogoClick} className="flex items-center gap-2 group cursor-pointer select-none">
-            <div className="w-2.5 h-2.5 bg-void border border-gold rotate-45 flex items-center justify-center shrink-0">
-              <div className="w-1.5 h-1.5 bg-gold rounded-full transition-transform duration-300 group-hover:scale-125" />
+          <a href="#hero" onClick={handleLogoClick} className="flex items-center gap-2.5 group cursor-pointer select-none">
+            <div className="w-2.5 h-2.5 bg-void border border-gold rotate-45 flex items-center justify-center shrink-0 transition-transform duration-500 group-hover:rotate-[135deg]">
+              <div className="w-1 h-1 bg-gold rounded-full transition-transform duration-300 group-hover:scale-125" />
             </div>
-            <span className="label text-gold tracking-widest transition-colors duration-300 group-hover:text-gold-light" style={{ fontSize: '0.78rem', fontWeight: 600 }}>
+            <span className="label text-gold tracking-widest transition-colors duration-300 group-hover:text-gold-light whitespace-nowrap" style={{ fontSize: '0.74rem', fontWeight: 600 }}>
               DHWANI CHAUHAN
             </span>
           </a>
 
           {/* Nav items */}
-          <div className="hidden lg:flex items-center gap-2">
+          <div className="hidden lg:flex items-center gap-1.5">
             {NAV.map((item, i) => (
               <motion.a 
                 key={item.href} 
@@ -126,11 +126,11 @@ export default function Nav() {
                 initial={{ opacity: 0 }} 
                 animate={{ opacity: 1 }} 
                 transition={{ delay: 0.3 + i * 0.05 }}
-                className="label text-mist hover:text-gold px-3.5 py-1.5 rounded-full transition-all duration-300 relative hover:bg-gold/5 group"
-                style={{ fontSize: '0.7rem', fontWeight: 400 }}
+                className="label text-mist hover:text-gold px-4 py-1.5 rounded-full transition-all duration-300 relative hover:bg-gold/5 group"
+                style={{ fontSize: '0.68rem', fontWeight: 400, letterSpacing: '0.08em' }}
               >
-                {item.label}
-                <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-gold opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                {item.label.toUpperCase()}
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1.5px] bg-gold rounded-full transition-all duration-300 group-hover:w-4" />
               </motion.a>
             ))}
           </div>
@@ -140,16 +140,16 @@ export default function Nav() {
             {isAdmin && (
               <button 
                 onClick={() => { setAdmin(false); toast.success('Logged out from admin mode') }}
-                className="label text-red-400 border border-red-400/20 px-5 py-2.5 rounded-full transition-all duration-300 hover:bg-red-400/5 hover:border-red-400/50 flex items-center gap-1.5 cursor-pointer"
-                style={{ fontSize: '0.7rem', fontWeight: 600 }}
+                className="label text-red-400 border border-red-400/25 px-5 py-2.5 rounded-full transition-all duration-300 hover:bg-red-400/5 hover:border-red-400/50 flex items-center gap-1.5 cursor-pointer"
+                style={{ fontSize: '0.66rem', fontWeight: 600 }}
               >
-                <Lock size={12} /> LOGOUT ADMIN
+                <Lock size={11} /> LOGOUT ADMIN
               </button>
             )}
             <a 
               href="#contact"
-              className="label text-void bg-gold border border-gold px-6 py-2.5 rounded-full transition-all duration-300 hover:bg-transparent hover:text-gold hover:border-gold/50"
-              style={{ fontSize: '0.7rem', fontWeight: 600 }}
+              className="label text-void bg-gold border border-gold px-6 py-2.5 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_15px_rgba(201,168,76,0.35)] active:scale-98"
+              style={{ fontSize: '0.68rem', fontWeight: 600 }}
             >
               HIRE ME
             </a>

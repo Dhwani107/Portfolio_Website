@@ -29,13 +29,22 @@ export default function TwinkleStars() {
     }))
     setShootingStars(generatedShooting)
 
-    // Listen to scroll to only show shooting stars below Hero
+    // Listen to scroll to only show shooting stars below Hero (throttled with rAF and passive listener)
+    let rAFId: number | null = null
     const handleScroll = () => {
-      setShowShooting(window.scrollY > 400)
+      if (rAFId === null) {
+        rAFId = requestAnimationFrame(() => {
+          setShowShooting(window.scrollY > 400)
+          rAFId = null
+        })
+      }
     }
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
     handleScroll()
-    return () => window.removeEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      if (rAFId !== null) cancelAnimationFrame(rAFId)
+    }
   }, [])
 
   if (!mounted) return null

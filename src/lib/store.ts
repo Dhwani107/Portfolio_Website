@@ -177,6 +177,9 @@ const defaultCertificates: Certificate[] = [
   { id: uid(), title: 'Prompt Engineering for Everyone', issuer: 'IBM Learning', date: '2024' },
   { id: uid(), title: 'Deep Learning with TensorFlow',  issuer: 'IBM Learning', date: '2024' },
   { id: uid(), title: 'Machine Learning with Python',   issuer: 'IBM Learning', date: '2024' },
+  { id: uid(), title: 'Intro to Machine Learning',      issuer: 'Kaggle',       date: '2024' },
+  { id: uid(), title: 'Intermediate Machine Learning', issuer: 'Kaggle',       date: '2024' },
+  { id: uid(), title: 'Python',                        issuer: 'Kaggle',       date: '2024' },
 ]
 
 const defaultEducations: Education[] = [
@@ -255,4 +258,4 @@ export const useStore = create<Store>()(persist((set) => ({
   addEducation:     (e)    => set(s => ({ educations:   [...s.educations,   { ...e,  id: uid() }] })),
   updateEducation:  (id,e) => set(s => ({ educations:   s.educations.map(x   => x.id===id ? {...x,...e}  : x) })),
   deleteEducation:  (id)   => set(s => ({ educations:   s.educations.filter(x => x.id!==id) })),
-}), { name: 'dhwani-portfolio-v4' }))
+}), { name: 'dhwani-portfolio-v5' }))

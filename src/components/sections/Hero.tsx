@@ -2,7 +2,7 @@
 import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
-import { ArrowDown, Github, Linkedin, Mail } from 'lucide-react'
+import { Github, Linkedin, Mail } from 'lucide-react'
 
 const HeroScene = dynamic(() => import('../3d/HeroScene'), { ssr: false })
 
@@ -69,99 +69,100 @@ export default function Hero() {
       <FloatDiamond style={{ top: '65%', left: '12%', '--dur':'11s', '--delay':'2s'  } as any} />
       <FloatDiamond style={{ top: '30%', left: '5%',  '--dur':'7s',  '--delay':'4s'  } as any} />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-8 pt-28 pb-20 w-full">
+      <div className="relative z-10 w-full px-8 md:px-16 lg:px-24 pt-32 pb-24">
+        <div className="max-w-xl md:max-w-2xl lg:max-w-[62%] xl:max-w-[55%] flex flex-col justify-center">
+          
+          {/* Portfolio badge */}
+          <motion.div initial={{ opacity:0, x:-24 }} animate={{ opacity:1, x:0 }} transition={{ duration:0.9, delay:0.3 }}
+            className="flex items-center gap-4 mb-12">
+            <div className="w-10 h-px" style={{ background:'linear-gradient(90deg, var(--gold), transparent)' }} />
+            <span className="label text-gold" style={{ fontSize:'0.8rem' }}>AI ENGINEER</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
+          </motion.div>
 
-        {/* Portfolio badge */}
-        <motion.div initial={{ opacity:0, x:-24 }} animate={{ opacity:1, x:0 }} transition={{ duration:0.9, delay:0.3 }}
-          className="flex items-center gap-4 mb-12">
-          <div className="w-10 h-px" style={{ background:'linear-gradient(90deg, var(--gold), transparent)' }} />
-          <span className="label text-gold" style={{ fontSize:'0.8rem' }}>AI ENGINEER · PORTFOLIO 2025</span>
-          <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
-        </motion.div>
+          {/* Staggered headline */}
+          <motion.div variants={stagger} initial="hidden" animate="show" className="mb-8">
+            {[
+              ["Hey, I'm",   'text-ivory'],
+              ['Dhwani',     'gold-shimmer'],
+              ['Chauhan.',   'text-ivory'],
+            ].map(([line, cls]) => (
+              <div key={line} className="overflow-hidden">
+                <motion.p variants={word} className={`display-xl ${cls}`}>{line}</motion.p>
+              </div>
+            ))}
+          </motion.div>
 
-        {/* Staggered headline */}
-        <motion.div variants={stagger} initial="hidden" animate="show" className="mb-8">
-          {[
-            ["Hey, I'm",   'text-ivory'],
-            ['Dhwani',     'gold-shimmer'],
-            ['Chauhan.',   'text-ivory'],
-          ].map(([line, cls]) => (
-            <div key={line} className="overflow-hidden">
-              <motion.p variants={word} className={`display-xl ${cls}`}>{line}</motion.p>
-            </div>
-          ))}
-        </motion.div>
+          {/* Typewriter */}
+          <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:1.3, duration:0.7 }}
+            className="flex items-center gap-3 mb-12">
+            <span className="label text-gold/60" style={{ fontSize:'0.78rem' }}>Specializing in:</span>
+            <span className="font-sans text-ivory" style={{ fontSize:'1.1rem', fontWeight:300, letterSpacing:'0.02em' }}>
+              {text}
+              <span className="inline-block w-0.5 h-5 bg-gold ml-1 animate-pulse align-middle" />
+            </span>
+          </motion.div>
 
-        {/* Typewriter */}
-        <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:1.3, duration:0.7 }}
-          className="flex items-center gap-3 mb-12">
-          <span className="label text-gold/60" style={{ fontSize:'0.78rem' }}>I build:</span>
-          <span className="font-sans text-ivory" style={{ fontSize:'1.1rem', fontWeight:300, letterSpacing:'0.02em' }}>
-            {text}
-            <span className="inline-block w-0.5 h-5 bg-gold ml-1 animate-pulse align-middle" />
-          </span>
-        </motion.div>
+          {/* Bio */}
+          <motion.p initial={{ opacity:0, y:24 }} animate={{ opacity:1, y:0 }} transition={{ delay:1.5, duration:0.9 }}
+            className="max-w-2xl body-lg mb-14" style={{ color:'#B0B0C8' }}>
+            AI engineer with hands-on experience building LLM applications using LangChain and RAG pipelines.
+            Delivered live projects in conversational AI and structured data extraction. Currently exploring
+            Agentic AI — focused on building intelligent systems that go from idea to deployment.
+          </motion.p>
 
-        {/* Bio */}
-        <motion.p initial={{ opacity:0, y:24 }} animate={{ opacity:1, y:0 }} transition={{ delay:1.5, duration:0.9 }}
-          className="max-w-2xl body-lg mb-14" style={{ color:'#B0B0C8' }}>
-          AI engineer with hands-on experience building LLM applications using LangChain and RAG pipelines.
-          Delivered live projects in conversational AI and structured data extraction. Currently exploring
-          Agentic AI — focused on building intelligent systems that go from idea to deployment.
-        </motion.p>
+          {/* Stats Grid */}
+          <motion.div initial={{ opacity:0, y:24 }} animate={{ opacity:1, y:0 }} transition={{ delay:1.7 }}
+            className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-16 max-w-3xl">
+            {[
+              ['4+',    'AI/ML Projects',        '0s'   ],
+              ['3',     'IBM Certifications',     '0.15s'],
+              ['8.576', 'GPA at TIU',             '0.3s' ],
+              ['Top 30','SIH 2024 (TIU Top 30)',  '0.45s'],
+            ].map(([n, l, d]) => (
+              <div key={l} className="stat-in glass p-5 rounded-md border border-gold/8 hover:border-gold/30 hover:-translate-y-1 hover:shadow-lg hover:shadow-gold/5 transition-all duration-300 flex flex-col justify-between min-h-[110px] relative overflow-hidden group" style={{ '--delay':d } as any}>
+                {/* Accent corner border on hover */}
+                <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-gold/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                
+                <div>
+                  <p className="font-display text-gold font-light italic leading-none"
+                    style={{ fontSize:'clamp(1.5rem,3.5vw,2.1rem)' }}>{n}</p>
+                </div>
+                <div className="mt-4">
+                  <div className="w-4 h-px bg-gold/35 mb-2 group-hover:w-8 transition-all duration-300" />
+                  <p className="label text-mist group-hover:text-ivory transition-colors" style={{ fontSize:'0.62rem', letterSpacing: '0.12em', lineHeight: '1.4' }}>{l.toUpperCase()}</p>
+                </div>
+              </div>
+            ))}
+          </motion.div>
 
-        {/* Stats */}
-        <motion.div initial={{ opacity:0, y:24 }} animate={{ opacity:1, y:0 }} transition={{ delay:1.7 }}
-          className="flex flex-wrap gap-12 mb-16">
-          {[
-            ['4+',    'AI/ML Projects',        '0s'   ],
-            ['3',     'IBM Certifications',     '0.15s'],
-            ['8.576', 'GPA at TIU',             '0.3s' ],
-            ['Top 30','SIH 2024 — 200+ Teams',  '0.45s'],
-          ].map(([n, l, d]) => (
-            <div key={l} className="stat-in" style={{ '--delay':d } as any}>
-              <p className="font-display text-gold font-light italic"
-                style={{ fontSize:'clamp(1.8rem,4vw,3rem)' }}>{n}</p>
-              <p className="label text-mist mt-1" style={{ fontSize:'0.7rem' }}>{l}</p>
-            </div>
-          ))}
-        </motion.div>
+          {/* CTAs */}
+          <motion.div initial={{ opacity:0, y:24 }} animate={{ opacity:1, y:0 }} transition={{ delay:1.9 }}
+            className="flex flex-wrap gap-5 mb-12">
+            <a href="#projects"
+              className="mag-btn label text-void bg-gold hover:bg-gold-light hover:shadow-lg hover:shadow-gold/20 px-10 py-5 inline-block transition-all duration-300 transform hover:-translate-y-0.5"
+              style={{ fontSize:'0.82rem', borderRadius:'2px' }}>VIEW MY WORK</a>
+            <a href="#contact"
+              className="label text-ivory border border-gold/20 hover:border-gold/50 hover:bg-gold/5 px-10 py-5 inline-block transition-all duration-300 transform hover:-translate-y-0.5"
+              style={{ fontSize:'0.82rem', borderRadius:'2px' }}>HIRE ME</a>
+          </motion.div>
 
-        {/* CTAs */}
-        <motion.div initial={{ opacity:0, y:24 }} animate={{ opacity:1, y:0 }} transition={{ delay:1.9 }}
-          className="flex flex-wrap gap-5 mb-12">
-          <a href="#projects"
-            className="mag-btn label text-void bg-gold px-10 py-5 inline-block"
-            style={{ fontSize:'0.82rem' }}>VIEW MY WORK</a>
-          <a href="#contact"
-            className="label text-ivory border border-gold/30 hover:border-gold/60 px-10 py-5 inline-block transition-colors duration-300"
-            style={{ fontSize:'0.82rem' }}>HIRE ME</a>
-        </motion.div>
-
-        {/* Socials */}
-        <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:2.1 }}
-          className="flex gap-5">
-          {[
-            { Icon: Github,   href:'https://github.com/Dhwani107',                                   label:'GitHub'   },
-            { Icon: Linkedin, href:'https://www.linkedin.com/in/dhwani-chauhan-aaa5ab280/',          label:'LinkedIn' },
-            { Icon: Mail,     href:'mailto:dhwanichauhan1072004@gmail.com',                          label:'Email'    },
-          ].map(({ Icon, href, label }) => (
-            <a key={label} href={href} target="_blank" rel="noopener noreferrer" title={label}
-              className="w-11 h-11 border border-gold/15 hover:border-gold/50 flex items-center justify-center text-mist hover:text-gold transition-all duration-300">
-              <Icon size={16} />
-            </a>
-          ))}
-        </motion.div>
+          {/* Socials */}
+          <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:2.1 }}
+            className="flex gap-5">
+            {[
+              { Icon: Github,   href:'https://github.com/Dhwani107',                                   label:'GitHub'   },
+              { Icon: Linkedin, href:'https://www.linkedin.com/in/dhwani-chauhan-aaa5ab280/',          label:'LinkedIn' },
+              { Icon: Mail,     href:'mailto:dhwanichauhan1072004@gmail.com',                          label:'Email'    },
+            ].map(({ Icon, href, label }) => (
+              <a key={label} href={href} target="_blank" rel="noopener noreferrer" title={label}
+                className="w-11 h-11 border border-gold/15 hover:border-gold/50 flex items-center justify-center text-mist hover:text-gold transition-all duration-300">
+                <Icon size={16} />
+              </a>
+            ))}
+          </motion.div>
+        </div>
       </div>
-
-      {/* Scroll hint */}
-      <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:2.4 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
-        <motion.div animate={{ y:[0,7,0] }} transition={{ repeat:Infinity, duration:2.2, ease:'easeInOut' }}>
-          <ArrowDown size={15} className="text-gold" />
-        </motion.div>
-        <span className="label" style={{ fontSize:'0.62rem', letterSpacing:'0.28em', color:'var(--mist)' }}>SCROLL</span>
-      </motion.div>
     </section>
   )
 }
