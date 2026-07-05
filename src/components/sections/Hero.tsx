@@ -142,7 +142,7 @@ export default function Hero() {
             <a href="#projects"
               className="mag-btn label text-void bg-gold hover:bg-gold-light hover:shadow-lg hover:shadow-gold/20 px-10 py-5 inline-block transition-all duration-300 transform hover:-translate-y-0.5"
               style={{ fontSize:'0.82rem', borderRadius:'2px' }}>VIEW MY WORK</a>
-            <a href="#contact"
+            <a href="https://www.linkedin.com/in/dhwani-chauhan-aaa5ab280/" target="_blank" rel="noopener noreferrer"
               className="label text-ivory border border-gold/20 hover:border-gold/50 hover:bg-gold/5 px-10 py-5 inline-block transition-all duration-300 transform hover:-translate-y-0.5"
               style={{ fontSize:'0.82rem', borderRadius:'2px' }}>HIRE ME</a>
           </motion.div>
