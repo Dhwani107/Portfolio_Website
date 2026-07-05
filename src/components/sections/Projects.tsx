@@ -34,6 +34,7 @@ const ProjectCard = React.memo(function ProjectCard({ p, i, onEdit, onDelete }: 
   p: Project; i: number; onEdit: () => void; onDelete: () => void
 }) {
   const { isAdmin } = useStore()
+  const [isExpanded, setIsExpanded] = useState(false)
   return (
     <motion.article
       initial={{ opacity: 0, y: 44 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -24 }}
@@ -79,7 +80,18 @@ const ProjectCard = React.memo(function ProjectCard({ p, i, onEdit, onDelete }: 
 
         <div className="gold-line mb-4 opacity-50" />
 
-        <p className="text-xs text-mist leading-relaxed mb-4 flex-1 line-clamp-4">{p.description}</p>
+        <p className={`text-xs text-mist leading-relaxed flex-1 ${isExpanded ? '' : 'line-clamp-4'} ${p.description.length > 150 ? 'mb-1' : 'mb-4'}`}>
+          {p.description}
+        </p>
+
+        {p.description.length > 150 && (
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="text-[0.68rem] text-gold/75 hover:text-gold font-mono tracking-widest mb-4 mt-1 transition-colors self-start cursor-pointer"
+          >
+            {isExpanded ? 'READ LESS ▲' : 'READ MORE ▼'}
+          </button>
+        )}
 
         <div className="flex flex-wrap gap-1.5 mb-5 shrink-0">
           {p.tags.map(t => (
