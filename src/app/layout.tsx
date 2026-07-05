@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
 import TwinkleStars from '@/components/ui/TwinkleStars'
+import CustomCursor from '@/components/ui/CustomCursor'
 
 export const metadata: Metadata = {
   title: 'Dhwani Chauhan — AI Engineer · LLM & Generative AI Developer',
@@ -14,6 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className="grain">
+        <CustomCursor />
         <TwinkleStars />
         {children}
         <Toaster position="bottom-right" toastOptions={{

@@ -431,3 +431,18 @@ body {
 .group:hover .animate-stardust-2 { animation: stardust-2 5s ease-in-out infinite; }
 .group:hover .animate-stardust-3 { animation: stardust-3 4.2s ease-in-out infinite; }
 
+/* ─── Custom Cursor base pointer hide ──────────────── */
+@media (pointer: fine) {
+  .has-custom-cursor,
+  .has-custom-cursor a,
+  .has-custom-cursor button,
+  .has-custom-cursor [role="button"],
+  .has-custom-cursor input,
+  .has-custom-cursor textarea,
+  .has-custom-cursor select,
+  .has-custom-cursor .cursor-pointer {
+    cursor: none !important;
+  }
+}
+
+

@@ -33,8 +33,8 @@ const defaultProjects: Project[] = [
     year: 2025,
     description: 'AI-powered movie information extractor that converts unstructured movie descriptions into structured metadata — title, genre, cast, ratings, and summaries. Built an interactive Streamlit interface integrated with LangChain and Mistral AI for real-time structured response generation.',
     tags: ['Python', 'LangChain', 'Mistral AI', 'Streamlit', 'Pydantic'],
-    github: 'https://github.com/Dhwani107',
-    live: '#',
+    github: 'https://github.com/Dhwani107/MovieFo',
+    live: 'https://moviefo.streamlit.app/',
     featured: true,
     index: 0,
     image: '/images/moviefoo.png',
@@ -46,8 +46,8 @@ const defaultProjects: Project[] = [
     year: 2025,
     description: 'Mood-based conversational AI chatbot generating responses in multiple emotional tones — cheerful, calm, playful, and intense. Implements both terminal and Streamlit web interfaces using LangChain LLM integrations and vector-based conversational workflows with FAISS.',
     tags: ['Python', 'LangChain', 'Mistral AI', 'FAISS', 'Streamlit'],
-    github: 'https://github.com/Dhwani107',
-    live: '#',
+    github: 'https://github.com/Dhwani107/Moody_Chatbot',
+    live: 'https://moodychatbot-bknrewlrteokopyeyp2mtc.streamlit.app/',
     featured: true,
     index: 1,
     image: '/images/moodychatbot.png',
@@ -59,7 +59,7 @@ const defaultProjects: Project[] = [
     year: 2025,
     description: 'Reinforcement learning agent trained to play Flappy Bird using Deep Q-Networks (DQN) with replay memory, epsilon-greedy exploration, and target networks. Includes model training, checkpoint saving, and human-playable modes for RL experimentation.',
     tags: ['Python', 'PyTorch', 'Gymnasium', 'DQN', 'Reinforcement Learning'],
-    github: 'https://github.com/Dhwani107',
+    github: 'https://github.com/Dhwani107/Flappy_Bird_Game_Trained_on_Reinforcement_Learning',
     featured: false,
     index: 2,
     image: '/images/flappybird.png',
@@ -71,7 +71,7 @@ const defaultProjects: Project[] = [
     year: 2024,
     description: 'Sentiment analysis web app classifying IMDb reviews as Positive, Neutral, or Negative using NLP techniques. Designed a lightweight, interpretable detection workflow for fast real-time text analysis without heavy ML overhead.',
     tags: ['Python', 'Flask', 'NLTK', 'Scikit-learn', 'NLP'],
-    github: 'https://github.com/Dhwani107',
+    github: 'https://github.com/Dhwani107/IMDb_Review_Sentiment_Analysis',
     featured: false,
     index: 3,
     image: '/images/sentimentanalysis.png',
@@ -174,12 +174,12 @@ const defaultExperiences: WorkExperience[] = [
 ]
 
 const defaultCertificates: Certificate[] = [
-  { id: uid(), title: 'Prompt Engineering for Everyone', issuer: 'IBM Learning', date: '2024' },
-  { id: uid(), title: 'Deep Learning with TensorFlow',  issuer: 'IBM Learning', date: '2024' },
-  { id: uid(), title: 'Machine Learning with Python',   issuer: 'IBM Learning', date: '2024' },
-  { id: uid(), title: 'Intro to Machine Learning',      issuer: 'Kaggle',       date: '2024' },
-  { id: uid(), title: 'Intermediate Machine Learning', issuer: 'Kaggle',       date: '2024' },
-  { id: uid(), title: 'Python',                        issuer: 'Kaggle',       date: '2024' },
+  { id: uid(), title: 'Prompt Engineering for Everyone', issuer: 'IBM Learning', date: '2025', url: 'https://courses.ibmlearning.skillsnetwork.site/certificates/313d2206f9b043f2ad2aa2360d2df7a8' },
+  { id: uid(), title: 'Deep Learning with TensorFlow',  issuer: 'IBM Learning', date: '2025', url: 'https://courses.ibmlearning.skillsnetwork.site/certificates/094b2e1a0f0d473b9c610be2abc1a216' },
+  { id: uid(), title: 'Machine Learning with Python',   issuer: 'IBM Learning', date: '2025', url: 'https://courses.ibmlearning.skillsnetwork.site/certificates/65bfd61e31bb43a5ac4cca568a983f00' },
+  { id: uid(), title: 'Intro to Machine Learning',      issuer: 'Kaggle',       date: '2024', url: 'https://www.kaggle.com/learn/certification/dhwani107/intro-to-machine-learning' },
+  { id: uid(), title: 'Intermediate Machine Learning', issuer: 'Kaggle',       date: '2024', url: 'https://www.kaggle.com/learn/certification/dhwani107/intermediate-machine-learning' },
+  { id: uid(), title: 'Python',                        issuer: 'Kaggle',       date: '2024', url: 'https://www.kaggle.com/learn/certification/dhwani107/python' },
 ]
 
 const defaultEducations: Education[] = [

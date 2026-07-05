@@ -153,7 +153,7 @@ export default function Hero() {
             {[
               { Icon: Github,   href:'https://github.com/Dhwani107',                                   label:'GitHub'   },
               { Icon: Linkedin, href:'https://www.linkedin.com/in/dhwani-chauhan-aaa5ab280/',          label:'LinkedIn' },
-              { Icon: Mail,     href:'mailto:dhwanichauhan1072004@gmail.com',                          label:'Email'    },
+              { Icon: Mail,     href:'https://mail.google.com/mail/?view=cm&fs=1&to=dhwanichauhan1072004@gmail.com',  label:'Email'    },
             ].map(({ Icon, href, label }) => (
               <a key={label} href={href} target="_blank" rel="noopener noreferrer" title={label}
                 className="w-11 h-11 border border-gold/15 hover:border-gold/50 flex items-center justify-center text-mist hover:text-gold transition-all duration-300">

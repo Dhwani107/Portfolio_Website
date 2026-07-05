@@ -8,7 +8,7 @@ import { useReveal } from '@/lib/useReveal'
 const SOCIALS = [
   { Icon: Github,   label:'GitHub',   href:'https://github.com/Dhwani107',                          sub:'github.com/Dhwani107'             },
   { Icon: Linkedin, label:'LinkedIn', href:'https://www.linkedin.com/in/dhwani-chauhan-aaa5ab280/', sub:'/dhwani-chauhan-aaa5ab280'        },
-  { Icon: Mail,     label:'Email',    href:'mailto:dhwanichauhan1072004@gmail.com',                 sub:'dhwanichauhan1072004@gmail.com'   },
+  { Icon: Mail,     label:'Email',    href:'https://mail.google.com/mail/?view=cm&fs=1&to=dhwanichauhan1072004@gmail.com', sub:'dhwanichauhan1072004@gmail.com'   },
   { Icon: Phone,    label:'Phone',    href:'tel:+919674310xxx',                                     sub:'+91 96743 10xxx'                  },
 ]
 

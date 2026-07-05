@@ -13,8 +13,17 @@ const CertForm = dynamic(() => import('./CertificatesForm'))
 const CertCard = React.memo(function CertCard({ cert, i, onEdit, onDelete, onView }: { cert: Certificate; i: number; onEdit: () => void; onDelete: () => void; onView: () => void }) {
   const ref = useReveal()
   const { isAdmin } = useStore()
+
+  const handleClick = () => {
+    if (cert.url) {
+      window.open(cert.url, '_blank', 'noopener,noreferrer')
+    } else {
+      onView()
+    }
+  }
+
   return (
-    <motion.div ref={ref} onClick={onView} className="reveal glass glass-hover corner-tl p-7 group relative overflow-hidden cursor-pointer"
+    <motion.div ref={ref} onClick={handleClick} className="reveal glass glass-hover corner-tl p-7 group relative overflow-hidden cursor-pointer"
       style={{ borderRadius: '2px' }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       <Award size={90} className="absolute -right-5 -top-5 pointer-events-none" style={{ color: 'rgba(201,168,76,0.04)' }} />
       <div className="flex items-start gap-5">

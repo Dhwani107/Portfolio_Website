@@ -284,7 +284,7 @@ function InteractiveGroup({ children }: { children: React.ReactNode }) {
   // - On desktop: Shift the planet to the right (approx 22% of viewport width)
   // - On mobile: Keep it centered (0) and offset slightly down to clear text overlays
   const xOffset = width > 7.5 ? Math.min(width * 0.22, 2.8) : 0
-  const yOffset = width > 7.5 ? 0 : -0.5
+  const yOffset = width > 7.5 ? 0.55 : 0.2
 
   useFrame((state) => {
     if (!groupRef.current) return
