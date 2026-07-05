@@ -147,7 +147,9 @@ export default function Nav() {
               </button>
             )}
             <a 
-              href="#contact"
+              href="https://www.linkedin.com/in/dhwani-chauhan-aaa5ab280/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="label text-void bg-gold border border-gold px-6 py-2.5 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_15px_rgba(201,168,76,0.35)] active:scale-98"
               style={{ fontSize: '0.68rem', fontWeight: 600 }}
             >
@@ -190,7 +192,9 @@ export default function Nav() {
           </button>
         )}
         <a 
-          href="#contact" 
+          href="https://www.linkedin.com/in/dhwani-chauhan-aaa5ab280/" 
+          target="_blank"
+          rel="noopener noreferrer"
           onClick={() => setMenuOpen(false)}
           className="label text-void bg-gold border border-gold px-12 py-3.5 rounded-full mt-4" 
           style={{ fontSize: '0.78rem', fontWeight: 600 }}
