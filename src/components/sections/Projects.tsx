@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Github, ExternalLink, Plus, Pencil, Trash2 } from 'lucide-react'
@@ -35,6 +35,27 @@ const ProjectCard = React.memo(function ProjectCard({ p, i, onEdit, onDelete }: 
 }) {
   const { isAdmin } = useStore()
   const [isExpanded, setIsExpanded] = useState(false)
+  const [hasOverflow, setHasOverflow] = useState(false)
+  const textRef = useRef<HTMLParagraphElement>(null)
+
+  useEffect(() => {
+    const el = textRef.current
+    if (!el) return
+
+    const checkOverflow = () => {
+      if (!isExpanded) {
+        setHasOverflow(el.scrollHeight > el.clientHeight)
+      }
+    }
+
+    const timer = setTimeout(checkOverflow, 100)
+    window.addEventListener('resize', checkOverflow)
+    return () => {
+      clearTimeout(timer)
+      window.removeEventListener('resize', checkOverflow)
+    }
+  }, [p.description, isExpanded])
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 44 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -24 }}
@@ -80,11 +101,14 @@ const ProjectCard = React.memo(function ProjectCard({ p, i, onEdit, onDelete }: 
 
         <div className="gold-line mb-4 opacity-50" />
 
-        <p className={`text-xs text-mist leading-relaxed flex-1 ${isExpanded ? '' : 'line-clamp-4'} ${p.description.length > 150 ? 'mb-1' : 'mb-4'}`}>
+        <p
+          ref={textRef}
+          className={`text-xs text-mist leading-relaxed flex-1 ${isExpanded ? '' : 'line-clamp-4'} ${hasOverflow ? 'mb-1' : 'mb-4'}`}
+        >
           {p.description}
         </p>
 
-        {p.description.length > 150 && (
+        {hasOverflow && (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
             className="text-[0.68rem] text-gold/75 hover:text-gold font-mono tracking-widest mb-4 mt-1 transition-colors self-start cursor-pointer"
