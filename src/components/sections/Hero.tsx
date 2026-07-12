@@ -7,11 +7,12 @@ import { Github, Linkedin, Mail } from 'lucide-react'
 const HeroScene = dynamic(() => import('../3d/HeroScene'), { ssr: false })
 
 const ROLES = [
-  'AI / ML Engineer',
-  'LLM Application Builder',
+  'AI / ML',
+  'LLM Application Building',
   'Generative AI Developer',
   'RAG & Agentic AI Explorer',
   'NLP & Deep Learning Enthusiast',
+  'DSA & Problem Solving',
 ]
 
 function FloatDiamond({ style }: { style: React.CSSProperties }) {
@@ -106,9 +107,11 @@ export default function Hero() {
           {/* Bio */}
           <motion.p initial={{ opacity:0, y:24 }} animate={{ opacity:1, y:0 }} transition={{ delay:1.5, duration:0.9 }}
             className="max-w-2xl body-lg mb-14" style={{ color:'#B0B0C8' }}>
-            AI engineer with hands-on experience building LLM applications using LangChain and RAG pipelines.
-            Delivered live projects in conversational AI and structured data extraction. Currently exploring
-            Agentic AI — focused on building intelligent systems that go from idea to deployment.
+            Computer Science undergraduate focused on building intelligent software that combines AI with
+            practical problem-solving. Experienced in developing LLM-powered applications, Retrieval-Augmented
+            Generation (RAG) systems, and modern web solutions. Continuously expanding expertise in Data
+            Structures and Algorithms, backend engineering, and Agentic AI to create scalable, real-world
+            applications.
           </motion.p>
 
           {/* Stats Grid */}
